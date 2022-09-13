@@ -6,34 +6,50 @@
 
 DESCRIPTION
 -----------
-This tool is used to add a new colomn to a Excel file with the uemail address.
+This tool is used to add a new colomn to a Excel file or a CSV file (tabulated) with
+the uemail address.
+
 To get the email, this Powershell script uses the Alma APIs and the primary id.
 
 Author: Raphaël Rey
 2022
 Support: SLSP support ("Third Party Integration" area)
 Licence: MIT
-Version 1.0
+Version 1.1
+
+HOW TO INSTALL IT
+-----------------
+- Get the following files and put them in the same folder:
+	- add_email_from_eduid.ps1
+	- .apikey_sample
+- Get an Alma Users API key with read rights
+- Rename the .apikey_sample file to .apikey
+- Add the api key in the .apikey file
+
 
 HOW TO USE IT
 -------------
 - Close Excel
-- Get an Alma Users API key with read rights
-- Open the current script for edition
-- Add the key in this file below "$API_KEY" in "Variables to be edited by the user" section
-- Add the absolute path to the file to modify (somthing that should normally beginn with "C:\...")
-- Save and run the script (double click on it)
+- Open PowerShell
+- Go to the script directory
+- Get a xlsx or csv file (delimitor ";"), column UserID
+- Type command:
+	> .\add_email_from_eduid_csv.ps1 .\path_to_the_file_to_process.xlsx
 
 RESULT
 ------
 The script creates a new file with the email of the users as the last column. The file
 will be suffixed with "_processed.xlsx"
 
-Note: if the script stops for any reason without finishing the process, it is possible to
-restart it at any row. You have only to indicate the row number in the "$START_ON_ROW"
-variable (see "Variables to be edited by the user" section)
+Note: You can also indicate a directory name. The system will process all the files contained in.
+Already processed files or not csv or xlsx files are ignored.
 
 EXCEL FILE REQUIREMENTS
 -----------------------
 - Has a "UserID" column
 - All headers are in row 1 and data starts in row 2
+
+CSV FILE REQUIREMENTS
+---------------------
+- Has a "UserID" column
+- Delimitor: ";"
