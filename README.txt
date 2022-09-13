@@ -6,7 +6,7 @@
 
 DESCRIPTION
 -----------
-This tool is used to add a new colomn to an Excel file with the email address.
+This tool is used to add a new colomn to a Excel file with the uemail address.
 To get the email, this Powershell script uses the Alma APIs and the primary id.
 
 Author: Raphaël Rey
@@ -17,12 +17,12 @@ Version 1.0
 
 HOW TO USE IT
 -------------
-- Close Excel (to avoid conflicts with the script)
+- Close Excel
 - Get an Alma Users API key with read rights
-- Open the script "add_email_from_eduid.ps1" for edition
+- Open the current script for edition
 - Add the key in this file below "$API_KEY" in "Variables to be edited by the user" section
 - Add the absolute path to the file to modify (somthing that should normally beginn with "C:\...")
-- Save and run the script with Powershell
+- Save and run the script (double click on it)
 
 RESULT
 ------
