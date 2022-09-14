@@ -55,3 +55,4 @@ CSV FILE REQUIREMENTS
 ---------------------
 - Has a "UserID" column
 - Delimitor: ";"
+- No column "Email" in the start file
