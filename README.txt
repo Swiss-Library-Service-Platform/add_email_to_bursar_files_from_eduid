@@ -34,12 +34,14 @@ HOW TO USE IT
 - Go to the script directory
 - Get a xlsx or csv file (delimitor ";"), column UserID
 - Type command:
-	> .\add_email_from_eduid_csv.ps1 .\path_to_the_file_to_process.xlsx
+	> .\add_email_from_eduid_csv.ps1 .\path_to_the_file_to_process.xlsx # for a xlsx file
+	> .\add_email_from_eduid_csv.ps1 .\path_to_the_file_to_process.csv # for a csv file
+	> .\add_email_from_eduid_csv.ps1 .\path_to_folder # for a folder
 
 RESULT
 ------
 The script creates a new file with the email of the users as the last column. The file
-will be suffixed with "_processed.xlsx"
+will be suffixed with "_processed.xlsx" or "_processed.csv".
 
 Note: You can also indicate a directory name. The system will process all the files contained in.
 Already processed files or not csv or xlsx files are ignored.

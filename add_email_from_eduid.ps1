@@ -102,7 +102,7 @@ foreach ($FILE_ABSOLUTE_PATH in $filesToProcess) {
 		$ExcelObj = New-Object -comobject Excel.Application
 
 		# Create name of the output file
-		$FILE_ABSOLUTE_PATH_DESTINATION = ($EXCEL_FILE_ABSOLUTE_PATH -split "\.")[0] + '_processed.xlsx'
+		$FILE_ABSOLUTE_PATH_DESTINATION = ($FILE_ABSOLUTE_PATH -split "\.")[0] + '_processed.xlsx'
 
 		# Open excel file
 		$ExcelWorkBook = $ExcelObj.Workbooks.Open($FILE_ABSOLUTE_PATH)
