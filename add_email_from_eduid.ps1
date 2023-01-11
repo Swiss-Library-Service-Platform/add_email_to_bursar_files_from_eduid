@@ -18,8 +18,9 @@ function get_email {
 	try {
 		$response = Invoke-WebRequest -Uri "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/users/${userId}?apikey=${API_KEY}&format=json" | ConvertFrom-Json
 	}
-	catch{
-		Write-Host "Failed to fetch data for user ${userId}" -ForegroundColor red
+	catch {
+		$errorMessage = $_
+		Write-Host "Failed to fetch data for user ${userId}: $errorMessage" -ForegroundColor red
 		continue
 	}
 	
