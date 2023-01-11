@@ -196,8 +196,8 @@ Start process...
 			$prefEmail = get_email
 
 			$ws.cells.Item($row_counter, $emailCol).value = $prefEmail
-			$ExcelWorkBook.Save()
 		}
+		$ExcelWorkBook.Save()
 		$ExcelWorkBook.close()
 	}
 }
