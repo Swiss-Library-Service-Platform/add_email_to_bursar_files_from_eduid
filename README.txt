@@ -56,3 +56,10 @@ CSV FILE REQUIREMENTS
 - Has a "UserID" column
 - Delimitor: ";"
 - No column "Email" in the start file
+
+HINT FOR USERS IN RESTRICTED ENVIRONMENTS
+------------------------------------------
+If the execution of PowerShell script is restricted, you can try to temporary disable the restriction.
+Enter the following command in PowerShell:
+
+	Set-ExecutionPolicy -Scope CurrentUser unrestricted
