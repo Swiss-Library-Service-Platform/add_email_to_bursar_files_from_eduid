@@ -16,7 +16,7 @@ function get_email {
 	Write-Host "Row ${row_counter}/${rowsCount}: get data for user ""${userId}"" ..."
 	
 	try {
-		$response = Invoke-WebRequest -Uri "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/users/${userId}?apikey=${API_KEY}&format=json" | ConvertFrom-Json
+		$response = Invoke-WebRequest -Uri "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/users/${userId}?apikey=${API_KEY}&format=json" -UseBasicParsing | ConvertFrom-Json
 	}
 	catch {
 		$errorMessage = $_
