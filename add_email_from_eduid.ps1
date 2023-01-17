@@ -16,10 +16,11 @@ function get_email {
 	Write-Host "Row ${row_counter}/${rowsCount}: get data for user ""${userId}"" ..."
 	
 	try {
-		$response = Invoke-WebRequest -Uri "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/users/${userId}?apikey=${API_KEY}&format=json" | ConvertFrom-Json
+		$response = Invoke-WebRequest -Uri "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/users/${userId}?apikey=${API_KEY}&format=json" -UseBasicParsing | ConvertFrom-Json
 	}
-	catch{
-		Write-Host "Failed to fetch data for user ${userId}" -ForegroundColor red
+	catch {
+		$errorMessage = $_
+		Write-Host "Failed to fetch data for user ${userId}: $errorMessage" -ForegroundColor red
 		continue
 	}
 	
@@ -91,7 +92,7 @@ foreach ($FILE_ABSOLUTE_PATH in $filesToProcess) {
 		$rowsCount = (Import-Csv $FILE_ABSOLUTE_PATH -Delimiter ';' | Measure-Object).count
 
 		# Create name of the output file
-		$FILE_ABSOLUTE_PATH_DESTINATION = ($FILE_ABSOLUTE_PATH -split "\.")[0] + '_processed.csv'	
+		$FILE_ABSOLUTE_PATH_DESTINATION = $FILE_ABSOLUTE_PATH -replace '\.[^\.]+$', '_processed.csv'	
 
 	} elseif ( $EXTENSION -eq ".xlsx" ){
 		###########################
@@ -102,7 +103,7 @@ foreach ($FILE_ABSOLUTE_PATH in $filesToProcess) {
 		$ExcelObj = New-Object -comobject Excel.Application
 
 		# Create name of the output file
-		$FILE_ABSOLUTE_PATH_DESTINATION = ($FILE_ABSOLUTE_PATH -split "\.")[0] + '_processed.xlsx'
+		$FILE_ABSOLUTE_PATH_DESTINATION = $FILE_ABSOLUTE_PATH -replace '\.[^\.]+$', '_processed.xlsx'
 
 		# Open excel file
 		$ExcelWorkBook = $ExcelObj.Workbooks.Open($FILE_ABSOLUTE_PATH)
