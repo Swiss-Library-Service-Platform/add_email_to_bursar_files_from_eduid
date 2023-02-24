@@ -1,8 +1,9 @@
-##########################################
-#                                        #
-#  SLSP tool to add a column with email  #
-#                                        #
-##########################################
+################################
+#                              #
+#  SLSP tool to add a columns  # 
+#  with email and name         #
+#                              #
+################################
 
 # Fetch API Key in .\apikey file
 $API_KEY = (Get-Content -Path .\.apikey).replace('API_KEY=', '').trim()
@@ -10,20 +11,28 @@ $API_KEY = (Get-Content -Path .\.apikey).replace('API_KEY=', '').trim()
 # Resolve provided path
 $ABSOLUTE_PATH = Resolve-Path $args[0]
 
-# Function to get the email address with api calls
-function get_email {
+# Function to get the additional data with api calls
+# Returns a map with the follwing keys:
+# email ; firstname ; lastname
+function get_api_data {
 	$prefEmail = ""
 	Write-Host "Row ${row_counter}/${rowsCount}: get data for user ""${userId}"" ..."
 	
 	try {
-		$response = Invoke-WebRequest -Uri "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/users/${userId}?apikey=${API_KEY}&format=json" -UseBasicParsing | ConvertFrom-Json
+		$responseObject = Invoke-WebRequest -Uri "https://api-eu.hosted.exlibrisgroup.com/almaws/v1/users/${userId}?apikey=${API_KEY}&format=json" -UseBasicParsing
+		# access the response data via .Content to avoid encding issues
+		$response = $responseObject.Content | ConvertFrom-Json
 	}
 	catch {
 		$errorMessage = $_
 		Write-Host "Failed to fetch data for user ${userId}: $errorMessage" -ForegroundColor red
 		continue
 	}
-	
+	$firstname = $response.first_name
+	Write-Host "${userId}: firstname found: ${firstname}"
+	$lastname = $response.last_name
+	Write-Host "${userId}: lastname found: ${lastname}"
+
 	$emails = $response.contact_info.email
 	$nbEmails = ($emails | Measure-Object).count
 	for ($i=0;$i -lt $nbEmails;$i++){
@@ -35,7 +44,7 @@ function get_email {
 			break
 		}
 	}
-	return $prefEmail
+	return @{ email = $prefEmail; firstname = $firstname; lastname = $lastname }
 
 }
 
@@ -132,8 +141,11 @@ foreach ($FILE_ABSOLUTE_PATH in $filesToProcess) {
 		}
 
 		# Add email row header
-		$emailCol = $columnsCount + 1
+		$emailCol = ++$columnsCount
 		$ws.cells.Item(1, $emailCol).value = "Email"
+		# Add name row header
+		$nameCol = ++$columnsCount
+		$ws.cells.Item(1, $nameCol).value = "Name"
 	} else {
 		Write-Host
 		Write-Host "Bad extension file ""${EXTENSION}"", must be "".csv"" or "".xlsx""" -ForegroundColor red
@@ -141,11 +153,11 @@ foreach ($FILE_ABSOLUTE_PATH in $filesToProcess) {
 	}
 
 	Write-Host @"
-##########################################
-#                                        #
-#  SLSP tool to add a column with email  #
-#                                        #
-##########################################
+###################################################
+#                                                 #
+#  SLSP tool to add a column with email and name  #
+#                                                 #
+###################################################
 
 Number of rows: ${rowsCount}
 Source file: ${ABSOLUTE_PATH}
@@ -165,12 +177,14 @@ Start process...
 		{
 			$row_counter++
 			$userId = $row.UserID
-			
-			# Get preferred email in prefEmail variable
-			$prefEmail = get_email
-			
-			$row | Add-Member -NotePropertyName 'Email' -NotePropertyValue $prefEmail
-			
+
+			# Get additional data
+			$user_data = get_api_data
+			$name = $user_data.lastname + ", " + $user_data.firstname
+
+			$row | Add-Member -NotePropertyName 'Email' -NotePropertyValue $user_data.email
+			$row | Add-Member -NotePropertyName 'Name' -NotePropertyValue $name
+
 		}
 		Write-Host
 		Write-Host "File saved to ${FILE_ABSOLUTE_PATH_DESTINATION}"
@@ -192,10 +206,12 @@ Start process...
 				continue
 			}
 			
-			# Get preferred email in prefEmail variable
-			$prefEmail = get_email
+			# Get email and name from API data
+			$user_data = get_api_data
+			$name = $user_data.lastname + ", " + $user_data.firstname
 
-			$ws.cells.Item($row_counter, $emailCol).value = $prefEmail
+			$ws.cells.Item($row_counter, $emailCol).value = $user_data.email
+			$ws.cells.Item($row_counter, $nameCol).value = $name
 			$ExcelWorkBook.Save()
 		}
 		$ExcelWorkBook.close()
