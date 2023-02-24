@@ -1,17 +1,18 @@
-##########################################
-#                                        #
-#  SLSP tool to add a column with email  #
-#                                        #
-##########################################
+##################################################
+#                                                #
+#  SLSP tool to add columns with email and name  #
+#                                                #
+##################################################
 
 DESCRIPTION
 -----------
-This tool is used to add a new colomn to a Excel file or a CSV file (tabulated) with
-the uemail address.
+This tool is used to add new colomns to a Excel file or a CSV file (tabulated) with
+the email address and the name.
 
 To get the email, this Powershell script uses the Alma APIs and the primary id.
 
 Author: Raphaël Rey
+Contributor: Jonas Furrer
 2022
 Support: SLSP support ("Third Party Integration" area)
 Licence: MIT
